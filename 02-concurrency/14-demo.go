@@ -2,23 +2,37 @@ package main
 
 import (
 	"fmt"
-	"sync"
 )
 
 // Share Memory By Communicating (using channels)
 
+/*
 func main() {
 	ch := make(chan int)
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
 	go add(100, 200, wg, ch)
-	wg.Wait()
 	result := <-ch
+	wg.Wait()
 	fmt.Println(result)
 }
 
 func add(x, y int, wg *sync.WaitGroup, ch chan int) {
-	defer wg.Done()
+	result := x + y
+	ch <- result
+	wg.Done()
+}
+*/
+
+// The above solution without a WaitGroup
+func main() {
+	ch := make(chan int)
+	go add(100, 200, ch)
+	result := <-ch
+	fmt.Println(result)
+}
+
+func add(x, y int, ch chan int) {
 	result := x + y
 	ch <- result
 }
