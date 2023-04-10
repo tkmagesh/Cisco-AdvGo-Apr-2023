@@ -20,11 +20,46 @@ Software Requirements:
 Repo:
     https://github.com/tkmagesh/cisco-advgo-apr-2023
 
+Agenda:
+    Day - 1
+        Concurrency
+            Context
+            Patterns
+    Day - 2
+        Http Services
+            Go Swagger
+        GRPC Services
+        Testing & Benchmarking
+    Day - 3
+        Database programming
+        Profiling Go Applications
+        Containerization of Go Applications
+            Docker 
+            Kubernetes
+
+Expectations
+    - Errors
+    - Panic & Recovery
+    - Interfaces
+    - Pointers
+    - Structs & Structs Composition
+    - Methods
+    - Modules & Packages
+    - Higher Order Functions
+
 About You:
     Name
     Primary Skillset
     Experience in Go
-    Have you attended MY Go foundation class?
+    Have you attended MY Go foundation class? (7 + 6)
     Any foundation topics you would like to revisit?
+        - Concurrency
+        - Context
+        - Interfaces
+
+    - GRPC
+    - Clean Code (Refactoring)
+    - Debugging
+    - Logging
 
 
