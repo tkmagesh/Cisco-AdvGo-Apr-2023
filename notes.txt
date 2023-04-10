@@ -63,3 +63,9 @@ About You:
     - Logging
 
 
+Concurrency Programming
+    Parallel Processing
+    Effective utilization of resources
+    Separating parts of workload
+
+    Writing an application with more than one execution path
