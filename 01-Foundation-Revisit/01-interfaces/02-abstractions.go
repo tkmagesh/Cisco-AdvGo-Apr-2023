@@ -13,6 +13,10 @@ func (c Circle) Area() float32 {
 	return math.Pi * c.Radius * c.Radius
 }
 
+func (c Circle) Perimeter() float32 {
+	return 2 * math.Pi * c.Radius
+}
+
 // utility functions
 // ver-1.0
 /*
@@ -85,17 +89,74 @@ func (r Rectangle) Area() float32 {
 	return r.Length * r.Breadth
 }
 
+func (r Rectangle) Perimeter() float32 {
+	return 2 * (r.Length + r.Breadth)
+}
+
+type PerimeterFinder interface{ Perimeter() float32 }
+
+func PrintPerimeter(x PerimeterFinder) {
+	fmt.Println("Perimeter :", x.Perimeter())
+}
+
+// ver-1.0
+/*
+func PrintStats(x interface {
+	interface{ Area() float32 }
+	interface{ Perimeter() float32 }
+}) {
+	PrintArea(x)      // interface { Area() float32 }
+	PrintPerimeter(x) // interface { Perimeter() float32 }
+}
+*/
+
+//ver-2.0
+/*
+func PrintStats(x interface {
+	Area() float32
+	Perimeter() float32
+}) {
+	PrintArea(x)      // interface { Area() float32 }
+	PrintPerimeter(x) // interface { Perimeter() float32 }
+}
+*/
+
+//ver-3.0
+/*
+func PrintStats(x interface {
+	AreaFinder
+	PerimeterFinder
+}) {
+	PrintArea(x)      // interface { Area() float32 }
+	PrintPerimeter(x) // interface { Perimeter() float32 }
+}
+*/
+
+//ver-4.0
+
+type ShapeStatsFinder interface {
+	AreaFinder
+	PerimeterFinder
+}
+
+func PrintStats(x ShapeStatsFinder) {
+	PrintArea(x)      // interface { Area() float32 }
+	PrintPerimeter(x) // interface { Perimeter() float32 }
+}
+
 func main() {
 	c := Circle{Radius: 12}
-	PrintArea(c)
+	/*
+		PrintArea(c)
+		PrintPerimeter(c)
+	*/
+	PrintStats(c)
 
 	r := Rectangle{Length: 10, Breadth: 12}
-	// fmt.Println("Area :", r.Area())
-	PrintArea(r)
+	/*
+		PrintArea(r)
+		PrintPerimeter(r)
+	*/
+	PrintStats(r)
 
-	// PrintArea(100)
-
-	// Implement the above concepts for "Perimeter()"
-	// Perimeter of circle = 2 * Pi * r
-	// Perimeter of Rectangle = 2 * (length + breadth)
 }
