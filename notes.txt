@@ -69,3 +69,19 @@ Concurrency Programming
     Separating parts of workload
 
     Writing an application with more than one execution path
+
+    Channel
+        Declaration
+            var ch chan int
+        Instantiation
+            ch = make(chan int)
+        Operations (<- operator)
+            Send
+                ch <- 100
+            Receive
+                data := <- ch
+
+        Behavior
+            A channel RECEIVE operation is ALWAYS a blocking operation
+            A SEND operation can succeed (UNBLOCKED) ONLY if a RECEIVE operation is already initiated, otherwise it will be BLOCKED until a receive operation is initiated (conditions apply)
+                

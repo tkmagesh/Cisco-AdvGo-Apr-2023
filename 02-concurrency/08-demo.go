@@ -33,4 +33,5 @@ func increment(wg *sync.WaitGroup) {
 		counter = counter + 1
 	}
 	mutex.Unlock()
+
 }
