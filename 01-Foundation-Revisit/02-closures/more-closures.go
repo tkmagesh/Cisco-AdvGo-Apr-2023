@@ -11,6 +11,6 @@ func main() {
 			fmt.Println("No : ", no)
 		}(i) // i is resolved NOT when the function is executed BUT when the function is scheduled for execution
 	}
-	time.Sleep(2 * time.Second)
+	time.Sleep(2 * time.Second) // main function execution is blocked for 2 seconds
 	fmt.Println("main completed")
 }
