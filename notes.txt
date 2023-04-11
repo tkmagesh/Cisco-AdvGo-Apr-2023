@@ -92,3 +92,44 @@ Pool
     Minimize the number of resources being created (NOT restricting)
 
 Runner
+
+GRPC
+    TCP
+    HTTP2
+        binary
+    protocol buffers
+        Share the schema between the client and server
+        Send & Receive ONLY data
+    Communication Patterns
+        Request & Response
+        Server Streaming (one request + stream of responses)
+        Client Streaming (stream of requests + one response)
+        Bidirectional Streaming (Stream of requests + Stream of responses)
+
+    Interop (restricted to a few languages / tech stack)
+
+Step:
+    1. Install the tools for generating proxy & stub
+    2. Create the Contract (protocol buffers)
+        Service Contract
+        Operation Contracts
+        Data / Message Contracts
+    3. Generate the proxy and the stub
+    4. Implement the service (in the server)
+    5. Host the service
+    6. Communicate from the client using the proxy
+
+Tools Installation
+    1. Protocol Buffers Compiler (protoc tool)
+        Windows:
+            Download the file, extract and keep in a folder (PATH) accessble through the command line
+            https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-win64.zip
+        Mac:
+            brew install protobuf
+
+        Verification:
+            protoc --version
+
+    2. Go plugins (installed in the GOPATH/bin folder)
+        go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
+        go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
