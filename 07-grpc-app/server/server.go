@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"net"
+	"time"
 
 	"github.com/tkmagesh/cisco-advgo-apr-2023/07-grpc-app/proto"
 	"google.golang.org/grpc"
@@ -32,6 +33,31 @@ func (asi *appServiceImpl) Add(ctx context.Context, req *proto.AddRequest) (*pro
 		return res, nil
 	}
 
+}
+
+func (asi *appServiceImpl) GeneratePrimes(req *proto.PrimeRequest, serverStream proto.AppService_GeneratePrimesServer) error {
+	start := req.GetStart()
+	end := req.GetEnd()
+	for no := start; no <= end; no++ {
+		if isPrime(no) {
+			resp := &proto.PrimeResponse{
+				PrimeNo: no,
+			}
+			log.Printf("Sending Prime no %d\n", no)
+			serverStream.Send(resp)
+			time.Sleep(500 * time.Millisecond)
+		}
+	}
+	return nil
+}
+
+func isPrime(no int32) bool {
+	for i := int32(2); i <= (no / 2); i++ {
+		if no%i == 0 {
+			return false
+		}
+	}
+	return true
 }
 
 func main() {
