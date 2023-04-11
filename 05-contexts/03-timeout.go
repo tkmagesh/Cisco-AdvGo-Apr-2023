@@ -28,6 +28,15 @@ func main() {
 
 func f1(ctx context.Context, wg *sync.WaitGroup) {
 	defer wg.Done()
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, 2*time.Second)
+	defer cancel()
+
+	wg.Add(1)
+	go f11(timeoutCtx, wg)
+
+	wg.Add(1)
+	go f12(timeoutCtx, wg)
 LOOP:
 	for {
 		select {
@@ -37,6 +46,36 @@ LOOP:
 		default:
 			time.Sleep(300 * time.Millisecond)
 			fmt.Println("[f1] producing data")
+		}
+	}
+}
+
+func f11(ctx context.Context, wg *sync.WaitGroup) {
+	defer wg.Done()
+LOOP:
+	for {
+		select {
+		case done := <-ctx.Done():
+			fmt.Println("[f11] Cancel signal received, done :", done)
+			break LOOP
+		default:
+			time.Sleep(300 * time.Millisecond)
+			fmt.Println("[f11] producing data")
+		}
+	}
+}
+
+func f12(ctx context.Context, wg *sync.WaitGroup) {
+	defer wg.Done()
+LOOP:
+	for {
+		select {
+		case done := <-ctx.Done():
+			fmt.Println("[f12] Cancel signal received, done :", done)
+			break LOOP
+		default:
+			time.Sleep(300 * time.Millisecond)
+			fmt.Println("[f12] producing data")
 		}
 	}
 }
