@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"runtime/debug"
 	"time"
 )
 
@@ -40,6 +41,7 @@ func divide(x, y int) (<-chan int, <-chan error) {
 			if err := recover(); err != nil {
 				errCh <- err.(error)
 				fmt.Println("Error sent to error channel")
+				debug.PrintStack()
 			}
 		}()
 		fmt.Println("Performing divide operation.....")
