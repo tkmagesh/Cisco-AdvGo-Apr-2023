@@ -33,7 +33,7 @@ func f1(ctx context.Context, wg *sync.WaitGroup) {
 	fmt.Println("[f1] app-key = ", ctx.Value("app-key"))
 
 	//overriding the values in the context
-	f1ValCtx := context.WithValue(ctx, "app-key", "f1-app-value")
+	f1ValCtx := context.WithValue(ctx, "app-key-1", "f1-app-value")
 	timeoutCtx, cancel := context.WithTimeout(f1ValCtx, 2*time.Second)
 
 	defer cancel()

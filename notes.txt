@@ -85,3 +85,10 @@ Concurrency Programming
             A channel RECEIVE operation is ALWAYS a blocking operation
             A SEND operation can succeed (UNBLOCKED) ONLY if a RECEIVE operation is already initiated, otherwise it will be BLOCKED until a receive operation is initiated (conditions apply)
                 
+Worker
+
+
+Pool
+    Minimize the number of resources being created (NOT restricting)
+
+Runner
