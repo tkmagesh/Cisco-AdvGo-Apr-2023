@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"log"
 	"net"
 
@@ -17,11 +18,20 @@ func (asi *appServiceImpl) Add(ctx context.Context, req *proto.AddRequest) (*pro
 	x := req.GetX()
 	y := req.GetY()
 	log.Printf("Add request received. x = %d and y = %d\n", x, y)
-	result := x + y
-	res := &proto.AddResponse{
-		Result: result,
+	// time.Sleep(5 * time.Second)
+	select {
+	case <-ctx.Done():
+		log.Println("timeout occurred")
+		return nil, errors.New("timeout occurred")
+	default:
+		result := x + y
+		res := &proto.AddResponse{
+			Result: result,
+		}
+		log.Println("Sending add response")
+		return res, nil
 	}
-	return res, nil
+
 }
 
 func main() {
