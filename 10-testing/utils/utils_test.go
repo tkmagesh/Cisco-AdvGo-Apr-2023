@@ -66,3 +66,16 @@ func Test_IsPrime(t *testing.T) {
 		})
 	}
 }
+
+// Benchmarking
+func Benchmark_IsPrime_97(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		IsPrime(97)
+	}
+}
+
+func Benchmark_IsPrime_2_97(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		IsPrime_2(97)
+	}
+}
