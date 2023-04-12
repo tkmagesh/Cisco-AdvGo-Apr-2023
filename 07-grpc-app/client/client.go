@@ -71,12 +71,13 @@ func doServerStreaming(ctx context.Context, appServiceClient proto.AppServiceCli
 }
 
 func doClientStreaming(ctx context.Context, appServiceClient proto.AppServiceClient) {
-	nos := []int32{3, 1, 4, 2, 5}
+	// nos := []int32{3, 1, 4, 2, 5}
+	fmt.Println("Hit ENTER to cancel....")
 	clientStream, err := appServiceClient.CalculateAverage(ctx)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	for _, no := range nos {
+	for no := int32(1); no <= 100; no++ {
 		time.Sleep(500 * time.Millisecond)
 		log.Printf("Sending No : %d\n", no)
 		req := &proto.AverageRequest{
