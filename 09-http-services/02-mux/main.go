@@ -4,8 +4,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -21,6 +23,25 @@ var products []Product = []Product{
 	{Id: 2, Name: "Pencil", Cost: 5},
 	{Id: 3, Name: "Marker", Cost: 50},
 }
+
+// middlewares
+func logMiddleware(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("%s - %s\n", r.Method, r.URL.Path)
+		handler.ServeHTTP(w, r)
+	})
+}
+
+func profileMiddleware(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		handler.ServeHTTP(w, r)
+		elapsed := time.Since(start)
+		fmt.Println("Elapsed :", elapsed)
+	})
+}
+
+//handlers
 
 func indexGetHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Hello World! - [GET]")
@@ -71,6 +92,8 @@ func addNewProduct(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	r := mux.NewRouter()
+	r.Use(logMiddleware)
+	r.Use(profileMiddleware)
 	r.HandleFunc("/", indexGetHandler)
 	r.HandleFunc("/products", getAllProducts).Methods(http.MethodGet)
 	r.HandleFunc("/products", addNewProduct).Methods(http.MethodPost)
