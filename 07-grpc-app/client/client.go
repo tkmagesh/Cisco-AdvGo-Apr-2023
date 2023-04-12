@@ -73,24 +73,50 @@ func doServerStreaming(ctx context.Context, appServiceClient proto.AppServiceCli
 func doClientStreaming(ctx context.Context, appServiceClient proto.AppServiceClient) {
 	// nos := []int32{3, 1, 4, 2, 5}
 	fmt.Println("Hit ENTER to cancel....")
-	clientStream, err := appServiceClient.CalculateAverage(ctx)
+	stopCh := make(chan struct{})
+	cancelCtx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	go func() {
+		fmt.Scanln()
+		close(stopCh)
+	}()
+
+	clientStream, err := appServiceClient.CalculateAverage(cancelCtx)
 	if err != nil {
 		log.Fatalln(err)
 	}
+LOOP:
 	for no := int32(1); no <= 100; no++ {
-		time.Sleep(500 * time.Millisecond)
-		log.Printf("Sending No : %d\n", no)
-		req := &proto.AverageRequest{
-			No: no,
+		select {
+		case <-stopCh:
+			cancel()
+			break LOOP
+		default:
+			time.Sleep(100 * time.Millisecond)
+			log.Printf("Sending No : %d\n", no)
+			req := &proto.AverageRequest{
+				No: no,
+			}
+			err := clientStream.Send(req)
+			if err == io.EOF {
+				fmt.Println("EOF received")
+				break LOOP
+			}
+			if err != nil {
+				log.Fatalln(err)
+			}
 		}
-		err := clientStream.Send(req)
+	}
+
+	select {
+	case <-stopCh: //<-cancelCtx.Done():
+		fmt.Println("Operation cancelled...")
+	default:
+		res, err := clientStream.CloseAndRecv()
 		if err != nil {
 			log.Fatalln(err)
 		}
+		fmt.Println("Average : ", res.GetAverage())
 	}
-	res, err := clientStream.CloseAndRecv()
-	if err != nil {
-		log.Fatalln(err)
-	}
-	fmt.Println("Average : ", res.GetAverage())
+
 }

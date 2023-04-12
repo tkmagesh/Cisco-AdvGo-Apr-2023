@@ -10,6 +10,8 @@ import (
 
 	"github.com/tkmagesh/cisco-advgo-apr-2023/07-grpc-app/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type appServiceImpl struct {
@@ -69,12 +71,17 @@ func (asi *appServiceImpl) CalculateAverage(serverStream proto.AppService_Calcul
 			break
 		}
 		if err != nil {
-			log.Fatalln(err)
+			if code := status.Code(err); code == codes.Canceled {
+				log.Println("Cancel request received....")
+				return nil
+			}
+			return err
 		}
 		log.Printf("Received No : %d\n", avgReq.GetNo())
 		sum += avgReq.GetNo()
 		count++
 	}
+
 	return nil
 }
 
