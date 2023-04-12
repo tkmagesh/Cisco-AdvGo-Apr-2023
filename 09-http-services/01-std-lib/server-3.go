@@ -25,14 +25,15 @@ type appRouter struct {
 	routes map[string]http.HandlerFunc
 }
 
-func (router *appRouter) Register(pattern string, handlerFn http.HandlerFunc) {
+func (router *appRouter) Register(method string, pattern string, handlerFn http.HandlerFunc) {
 	router.routes[pattern] = handlerFn
 }
 
-func (router *appRouter) Method(methodName string) http.HandlerFunc {
+func (router *appRouter) Get(pattern string, handlerFn http.HandlerFunc) http.HandlerFunc {
+	router.routes[pattern] = handlerFn
 	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == methodName {
-			router.ServeHTTP(w, r)
+		if r.Method == http.MethodGet {
+			handlerFn(w, r)
 			return
 		}
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
